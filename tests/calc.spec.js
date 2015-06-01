@@ -1,10 +1,4 @@
-
-
-var expect = require('unexpected');
-
 var calc = require('../src/calc');
-// Removing require('unexpected-dom') fixes the SyntaxError, and causes the tests to run
-var unexpectedDom = require('unexpected-dom');
 
 
 

@@ -16,10 +16,9 @@ module.exports = function (wallaby) {
             { pattern: 'tests/phantomPolyfill.js', instrument: false},
             { pattern: 'src/**/*.js', load: false },
 
-// Adding the instrument false to unexpected causes wallaby to hang
-// Same thing when node_modules/jsdom/**/* is added to the instrument:false, load:false list
-            { pattern: 'node_modules/unexpected-dom/**/*', instrument: false, load: false }
-
+            // Loading without browserify (load: true is default)
+            { pattern: 'node_modules/unexpected/unexpected.js', instrument: false },
+            { pattern: 'node_modules/unexpected-dom/unexpected-dom.min.js', instrument: false }
         ],
 
         tests: [
@@ -29,9 +28,13 @@ module.exports = function (wallaby) {
         postprocessor: wallabyPostprocessor,
 
         bootstrap: function () {
-
+            // Assigning globals to avoid the initialization in each test
+            window.expect = weknowhow.expect;
+            window.expect.installPlugin(unexpected.dom);
             // required to trigger tests loading
             window.__moduleBundler.loadTests();
         }
+        // Can be used to provide some more diagnostics
+        //, debug: true
     }
-}
+};
